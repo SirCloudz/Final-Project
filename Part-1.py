@@ -3,7 +3,6 @@ import random
 import time
 import json
 
-
 iserp = [(0, 1), (0, 2), (0, 3)]
 imanz = []
 imatriz = []
@@ -29,19 +28,17 @@ def cargar_jugadores():
     except FileNotFoundError:
         jugadores = {}
 
-
 def prevgame():
     imanz.clear()
+    print()
     print("## INICIO DEL JUEGO ##")
     time.sleep(0.5)
-    x = input("Ingrese el nombre: ")
-    correo = input("Ingrese su correo: ")
-    jugadores[x] = {"puntaje": 0, "correo": correo}
+    print()
+    x = input("Ingrese su nombre: ")
+    print("\n####################")
+    jugadores[x] = {"puntaje": 0}
     guardar_jugadores()
     nombre, puntaje = game(iserp.copy(), imatriz, x, 0, 0, 0)
-
-    # Estas lineas son para ver si es necesario actualizar
-    # En el caso que haya un jugador con puntajes mayores
 
     if puntaje > jugadores[nombre]["puntaje"]:
         jugadores[nombre]["puntaje"] = puntaje
@@ -50,7 +47,7 @@ def prevgame():
 
 
 def game(serp, mz, name, pj, sp, mov):
-    if (sp == 1):
+    if sp == 1:
         print("Fin del juego")
         print("Puntaje total: " + str(pj))
         return (name, pj)
@@ -62,25 +59,28 @@ def game(serp, mz, name, pj, sp, mov):
     print("## SNAKE ##")
     print("Jugador: ", str(name))
     print("Puntaje: ", str(pj))
+    # MATRIZ
     for i in range(10):
         for j in range(20):
             if (i, j) in serp:
-                print(Fore.BLUE+"-"+Style.RESET_ALL, end="")
-                if (i, j) in imanz:
-                    imanz.remove((i, j))
-                    pj = pj+1
+                if (i, j) == serp[-1]:
+                    print(Fore.BLUE + ">" + Style.RESET_ALL, end="")
+                else:
+                    print(Fore.BLUE + "-" + Style.RESET_ALL, end="")
+
             elif (i, j) in imanz:
                 print(Fore.RED+"@"+Style.RESET_ALL, end="")
             else:
                 print(Fore.GREEN+mz[i][j]+Style.RESET_ALL, end="")
         print()
+    # CUANDO ESTEN 3 MANZANAS
     if len(imanz) == 3:
-        sp = 1
         print()
         print("Fin dej juego")
         print("Puntaje total: ", pj)
 
         return (name, pj)
+    # MOVIMIENTOS
     print("Arriba (w)")
     print("Abajo (s)")
     print("Izquierda (a)")
@@ -136,7 +136,7 @@ def record():
                             key=lambda j: j[1]["puntaje"], reverse=True)
         for i, (name, datos) in enumerate(organizado, 1):
             print(
-                f"{i}. {name} | Puntaje: {datos['puntaje']} | Correo: {datos['correo']}")
+                f"{i}. {name} | Puntaje: {datos['puntaje']}")
         print()
     x = input("Ingrese la opcion s para regresar al menu principal: ")
     while x != "s":
@@ -156,6 +156,7 @@ def Pinicio():
     time.sleep(0.5)
     print()
     print("####################")
+    print()
     x = input("Seleccione una opcion: ")
     while x not in ["1", "2", "3"]:
         x = input("Por favor vuelva a selecionar la opcion: ")
@@ -177,6 +178,5 @@ def inicio():
         print("Hasta luego!!!!")
         return 0
     return inicio()
-
 
 inicio()
